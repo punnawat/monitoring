@@ -18,92 +18,103 @@
             <th>Location</th>                        
         </tr>
         <?php foreach ($servers as $row): ?>
+            <?php if ($row['monitor_yn'] == 'Y' && $row['is_show'] == true) : ?>
             <tr valign="top">
                 <td align="center"><?php echo $row['server_name']; ?></td>
                 <td align="center"><?php echo $row['ip_address']; ?></td>
-                <td align="left">
-                    <?php if ($row['monitor_yn'] == 'Y') : ?>
+                <td align="left">                    
                         <table class="log">
                             <col width="25px" />
                             <col width="75px" />                    
                             <col width="*" />
-                            <?php if ($row['http_yn'] == 'Y') : ?>
+                            <col width="25px" />
+                            <col width="*" />
+                            <?php if ($row['http_yn'] == 'Y' && ($row['status_http_down'] != null || $row['status_http_up'] != null)) : ?>
                                 <tr>
                                     <td align="center"><img src="<?php
-                                        if ($row['status_http'] == "UP")
-                                            echo base_url() . "images/green.png";
-                                        else
-                                            echo base_url() . "images/red.png";
-                                                    ?>" width="15" /></td>
+                                        if ($row['status_http_down'] != "")                                            
+                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
                                     <td>HTTP</td>                        
-                                    <td><?php echo $row['log_http_date'] != "" ? date("d/m/y H:i:s", strtotime($row['log_http_date'])) : "";  ?></td>
+                                    <td><?php echo $row['status_http_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_http_down'])) : "";  ?></td>
+                                    <td align="center"><img src="<?php
+                                        if ($row['status_http_up'] != "")                                            
+                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                    <td><?php echo $row['status_http_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_http_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?>
                             
-                            <?php if ($row['https_yn'] == 'Y') : ?>
+                            <?php if ($row['https_yn'] == 'Y' && ($row['status_https_down'] != null || $row['status_https_up'] != null)) : ?>
                                 <tr>
                                     <td align="center"><img src="<?php
-                                        if ($row['status_https'] == "UP")
-                                            echo base_url() . "images/green.png";
-                                        else
-                                            echo base_url() . "images/red.png";
-                                                    ?>" width="15" /></td>
+                                        if ($row['status_https_down'] != "")                                            
+                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
                                     <td>HTTPS</td>                        
-                                    <td><?php echo $row['log_https_date'] != "" ? date("d/m/y H:i:s", strtotime($row['log_https_date'])) : ""; ?></td>
+                                    <td><?php echo $row['status_https_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_https_down'])) : ""; ?></td>
+                                    <td align="center"><img src="<?php
+                                        if ($row['status_https_up'] != "")                                            
+                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                    <td><?php echo $row['status_https_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_https_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?>
                             
-                            <?php if ($row['ftp20_yn'] == 'Y') : ?>
+                            <?php if ($row['ftp20_yn'] == 'Y' && ($row['status_ftp20_down'] != null || $row['status_ftp20_up'] != null)) : ?>
                                 <tr>
                                     <td align="center"><img src="<?php
-                                        if ($row['status_http'] == "UP")
-                                            echo base_url() . "images/green.png";
-                                        else
-                                            echo base_url() . "images/red.png";
-                                                    ?>" width="15" /></td>
+                                        if ($row['status_ftp20_down'] != "")                                            
+                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
                                     <td>FTP(20)</td>                        
-                                    <td><?php echo $row['log_ftp20_date'] != "" ? date("d/m/y H:i:s", strtotime($row['log_ftp20_date'])) : ""; ?></td>
+                                    <td><?php echo $row['status_ftp20_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_ftp20_down'])) : ""; ?></td>
+                                    <td align="center"><img src="<?php
+                                        if ($row['status_ftp20_up'] != "")                                            
+                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                    <td><?php echo $row['status_ftp20_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_ftp20_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?> 
-                            <?php if ($row['ftp21_yn'] == 'Y') : ?>
+                            <?php if ($row['ftp21_yn'] == 'Y'  && ($row['status_ftp21_down'] != null || $row['status_ftp21_up'] != null)) : ?>
                                 <tr>
                                     <td align="center"><img src="<?php
-                                        if ($row['status_http'] == "UP")
-                                            echo base_url() . "images/green.png";
-                                        else
-                                            echo base_url() . "images/red.png";
-                                                    ?>" width="15" /></td>
+                                        if ($row['status_ftp21_down'] != "")                                            
+                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
                                     <td>FTP(21)</td>                        
-                                    <td><?php echo $row['log_ftp21_date'] != "" ? date("d/m/y H:i:s", strtotime($row['log_ftp21_date'])) : ""; ?></td>
+                                    <td><?php echo $row['status_ftp21_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_ftp21_down'])) : ""; ?></td>
+                                    <td align="center"><img src="<?php
+                                        if ($row['status_ftp21_up'] != "")                                            
+                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                    <td><?php echo $row['status_ftp21_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_ftp21_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?>
-                            <?php if ($row['smtp_yn'] == 'Y') : ?>
+                            <?php if ($row['smtp_yn'] == 'Y' && ($row['status_smtp_down'] != null || $row['status_smtp_up'] != null)) : ?>
                                 <tr>
                                     <td align="center"><img src="<?php
-                                        if ($row['status_http'] == "UP")
-                                            echo base_url() . "images/green.png";
-                                        else
-                                            echo base_url() . "images/red.png";
-                                                    ?>" width="15" /></td>
+                                        if ($row['status_smtp_down'] != "")                                            
+                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
                                     <td>SMTP</td>                        
-                                    <td><?php echo $row['log_smtp_date'] != "" ? date("d/m/y H:i:s", strtotime($row['log_smtp_date'])) : "";?></td>
+                                    <td><?php echo $row['status_smtp_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_smtp_down'])) : "";?></td>
+                                    <td align="center"><img src="<?php
+                                        if ($row['status_smtp_up'] != "")                                            
+                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                    <td><?php echo $row['status_smtp_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_smtp_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?> 
-                            <?php if ($row['tcp_port'] != NULL && $row['tcp_port'] != '') {
+                            <?php if ($row['tcp_port'] != NULL && $row['tcp_port'] != '') :
                                         $dataArr = explode(",", $row['tcp_port']);
-                                        foreach ($dataArr as $d) {?>
+                                        foreach ($dataArr as $d) :
+                                             if ($row['status_tcp_down'. trim($d)] == null && $row['status_tcp_up'. trim($d)] == null)
+                                                 continue;
+                                            ?>
                                         <tr>
                                             <td align="center"><img src="<?php
-                                                if ($row['status_tcp'. trim($d)] == "UP")
-                                                    echo base_url() . "images/green.png";
-                                                else
-                                                    echo base_url() . "images/red.png";
-                                                            ?>" width="15" /></td>
+                                                if ($row['status_tcp_down'. trim($d)] != "")                                            
+                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
                                             <td>TCP(<?php echo trim($d);?>)</td>                        
-                                            <td><?php echo $row['log_tcp_date'. trim($d)] != "" ? date("d/m/y H:i:s", strtotime($row['log_tcp_date'. trim($d)])) : "";?></td>
+                                            <td><?php echo $row['status_tcp_down'. trim($d)] != "" ? date("d/m/y H:i:s", strtotime($row['status_tcp_down'. trim($d)])) : "";?></td>
+                                            <td align="center"><img src="<?php
+                                                if ($row['status_tcp_up'. trim($d)] != "")                                            
+                                                    echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                            <td><?php echo $row['status_tcp_up'. trim($d)] != "" ? date("d/m/y H:i:s", strtotime($row['status_tcp_up'. trim($d)])) : "";  ?></td>
                                         </tr>
-                                        <?php }
-                                 } ?>                                     
+                                        <?php endforeach;
+                                 endif; ?>                                     
                          </table> 
                     </td>
                     <td align="left"><?php echo "<b>Floor:</b> " . $row['location_floor'] . ' <b>Rack:</b> ' . $row['location_rack'] . ' <br/><b>Room:</b> ' . $row['location_room'] . ' <b>Building:</b> ' . $row['location_building']; ?></td>            

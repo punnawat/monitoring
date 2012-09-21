@@ -33,38 +33,45 @@ class Server_model extends CI_Model {
     }
 
     function scanLog($q) {   
-        $r = array();        
+        $r = null;
         $logs = $q->result_array();
-        
-        if ($logs != NULL && count($logs) > 0) {  
-            if ($logs[0]['status'] == 'UP') {
-                $r['log_status'] = 'UP';
-                $r['log_date'] = $logs[0]['updated_date'];                
-            } else {
+        //print_r($logs);
+        if ($logs != NULL && count($logs) > 0) {
+            if (($logs[0]['status'] == 'DOWN') ||
+                    ($logs[0]['status'] == 'UP' && count($logs) >= 2 && $logs[1]['status'] == 'DOWN')) {
+                $r = array('log_date_down' => '', 'log_date_up' => '');
+                
                 $down_count = 0;
-                $last_down_time = $logs[count($logs)-1]['updated_date'];
-                $last_up_time = $logs[count($logs)-1]['updated_date'];
-                foreach ($logs as $l) {
-                    //echo $l['status'];
-                    if ($l['status'] == 'DOWN') {
-                        //print_r($l);
-                        $down_count++;
-                        $last_down_time = $l['updated_date'];
-                    } else {        
-                        
-                        $last_up_time = $l['updated_date'];
-                        break;
+
+                $last_down_time = "";
+                if ($logs[0]['status'] == 'DOWN') {
+                    $last_down_time = $logs[0]['updated_date'];
+                    $down_count++;
+                }
+
+                $last_up_time = "";
+                if ($logs[0]['status'] == 'UP') {                    
+                    $r['log_date_up'] = $logs[0]['updated_date'];
+                }
+
+                if (count($logs) > 1) {
+                    for ($i = 1; $i < count($logs); $i++) {
+                        $l = $logs[$i];
+                        if ($l['status'] == 'DOWN') {
+                            $down_count++;
+                            $last_down_time = $l['updated_date'];
+                        } else {
+                            break;
+                        }
                     }
                 }
-                if ($down_count >= 5) {
-                    $r['log_status'] = 'DOWN';
-                    $r['log_date'] = $last_down_time;                   
-                } else {
-                    $r['log_status'] = 'UP';
-                    $r['log_date'] = $last_up_time;                    
-                }
+
+                if ($down_count >= 5) {                    
+                    $r['log_date_down'] = $last_down_time;
+                } 
             }
-        }       
+        }
+//        print_r($r);
         return $r;
     }
 
@@ -75,17 +82,21 @@ class Server_model extends CI_Model {
         $result = array();
         $result_index = 0;
         
-
+        $isShow = false;
         foreach ($rows as $r) {
             $result[$result_index] = $r;
             if ($r['http_yn'] == 'Y') {
                 $this->db->order_by("updated_date", "desc");
                 $q = $this->db->get_where('log_check_services', array('server_id' => $r['id'],
                                                                       'service' => 'HTTP'));
-                $log_result = $this->scanLog($q);                
-                $result[$result_index]['status_http'] = isset($log_result['log_status']) ? $log_result['log_status'] : "DOWN";
-                $result[$result_index]['log_http_date'] = isset($log_result['log_date']) ? $log_result['log_date'] : "";
-                //$result_index++; 
+                $log_result = $this->scanLog($q); 
+                if($log_result != null) {               
+                    $result[$result_index]['status_http_down'] = $log_result['log_date_down'];  
+                    $result[$result_index]['status_http_up'] = $log_result['log_date_up'];  $isShow = true;
+                } else {                
+                    $result[$result_index]['status_http_down'] = "";
+                    $result[$result_index]['status_http_up'] = "";
+                }                
             }
             
             if ($r['https_yn'] == 'Y') {
@@ -93,9 +104,13 @@ class Server_model extends CI_Model {
                 $q = $this->db->get_where('log_check_services', array('server_id' => $r['id'],
                                                                       'service' => 'HTTPS'));
                 $log_result = $this->scanLog($q);
-                $result[$result_index]['status_https'] = isset($log_result['log_status']) ? $log_result['log_status'] : "DOWN";
-                $result[$result_index]['log_https_date'] = isset($log_result['log_date']) ? $log_result['log_date'] : "";
-                //$result_index++; 
+                if($log_result != null) {               
+                    $result[$result_index]['status_https_down'] = $log_result['log_date_down'];
+                    $result[$result_index]['status_https_up'] = $log_result['log_date_up']; $isShow = true;
+                } else {                
+                    $result[$result_index]['status_https_down'] = "";
+                    $result[$result_index]['status_https_up'] = "";
+                }
             }
             
             if ($r['ftp20_yn'] == 'Y') {
@@ -103,9 +118,13 @@ class Server_model extends CI_Model {
                 $q = $this->db->get_where('log_check_services', array('server_id' => $r['id'],
                                                                       'service' => 'FTP:20'));
                 $log_result = $this->scanLog($q);
-                $result[$result_index]['status_ftp20'] = isset($log_result['log_status']) ? $log_result['log_status'] : "DOWN";
-                $result[$result_index]['log_ftp20_date'] = isset($log_result['log_date']) ? $log_result['log_date'] : "";
-                //$result_index++; 
+                if($log_result != null) {               
+                    $result[$result_index]['status_ftp20_down'] = $log_result['log_date_down'];
+                    $result[$result_index]['status_ftp20_up'] = $log_result['log_date_up']; $isShow = true;
+                } else {                
+                    $result[$result_index]['status_ftp20_down'] = "";
+                    $result[$result_index]['status_ftp20_up'] = "";
+                }
             }
             
             if ($r['ftp21_yn'] == 'Y') {
@@ -113,9 +132,13 @@ class Server_model extends CI_Model {
                 $q = $this->db->get_where('log_check_services', array('server_id' => $r['id'],
                                                                       'service' => 'FTP:21'));
                 $log_result = $this->scanLog($q);
-                $result[$result_index]['status_ftp21'] = isset($log_result['log_status']) ? $log_result['log_status'] : "DOWN";
-                $result[$result_index]['log_ftp21_date'] = isset($log_result['log_date']) ? $log_result['log_date'] : "";
-                //$result_index++; 
+                if($log_result != null) {               
+                    $result[$result_index]['status_ftp21_down'] = $log_result['log_date_down'];
+                    $result[$result_index]['status_ftp21_up'] = $log_result['log_date_up']; $isShow = true;
+                } else {                
+                    $result[$result_index]['status_ftp21_down'] = "";
+                    $result[$result_index]['status_ftp21_up'] = "";
+                }
             }
             
             if ($r['smtp_yn'] == 'Y') {
@@ -123,9 +146,13 @@ class Server_model extends CI_Model {
                 $q = $this->db->get_where('log_check_services', array('server_id' => $r['id'],
                                                                       'service' => 'SMTP'));
                 $log_result = $this->scanLog($q);
-                $result[$result_index]['status_smtp'] = isset($log_result['log_status']) ? $log_result['log_status'] : "DOWN";
-                $result[$result_index]['log_smtp_date'] = isset($log_result['log_date']) ? $log_result['log_date'] : "";
-                //$result_index++; 
+                if($log_result != null) {               
+                    $result[$result_index]['status_smtp_down'] = $log_result['log_date_down'];
+                    $result[$result_index]['status_smtp_up'] = $log_result['log_date_up'];  $isShow = true;
+                } else {                
+                    $result[$result_index]['status_smtp_down'] = "";
+                    $result[$result_index]['status_smtp_up'] = "";
+                }
             }
             
             if ($r['tcp_port'] != NULL && $r['tcp_port'] != '') {
@@ -135,11 +162,16 @@ class Server_model extends CI_Model {
                     $q = $this->db->get_where('log_check_services', array('server_id' => $r['id'],
                                                                             'service' => "TCP:" . trim($d)));
                     $log_result = $this->scanLog($q);
-                    $result[$result_index]['status_tcp' . trim($d)] = isset($log_result['log_status']) ? $log_result['log_status'] : "DOWN";
-                    $result[$result_index]['log_tcp_date' . trim($d)] = isset($log_result['log_date']) ? $log_result['log_date'] : "";
-                     
+                    if($log_result != null) {               
+                        $result[$result_index]['status_tcp_down'. trim($d)] = $log_result['log_date_down'];
+                        $result[$result_index]['status_tcp_up'. trim($d)] = $log_result['log_date_up']; $isShow = true;
+                    } else {                
+                        $result[$result_index]['status_tcp_down'. trim($d)] = "";
+                        $result[$result_index]['status_tcp_up'. trim($d)] = "";
+                    }                                      
                 }                
             }
+            $result[$result_index]['is_show'] = $isShow;
             $result_index++;
         }
 

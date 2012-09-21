@@ -17,31 +17,32 @@
             <th>Status</th>            
             <th>Location</th>                        
         </tr>
-        <?php foreach ($servers as $row): ?>
+        <?php  foreach ($servers as $row): ?>
+            <?php if ($row['monitor_yn'] == 'Y' && ($row['log_ping_date_down'] != "" || $row['log_ping_date_up'] != "")) : ?>
             <tr valign="top">
                 <td align="center"><?php echo $row['device_name']; ?></td>
                 <td align="center"><?php echo $row['ip_address']; ?></td>
-                <td align="center">
-                    <?php if ($row['monitor_yn'] == 'Y') : ?>
+                <td align="center">                    
                         <table class="log">
                             <col width="25px" />
-                            <col width="*" />                                                
+                            <col width="*" /> 
+                            <col width="25px" />
+                            <col width="*" />
                                 <tr>
                                     <td align="center"><img src="<?php
-                                        if ($row['status_ping'] == "UP")
-                                            echo base_url() . "images/green.png";
-                                        else
-                                            echo base_url() . "images/red.png";
-                                                    ?>" width="15" /></td>
-                                                           
-                                    <td><?php echo $row['log_ping_date'] != "" ? date("d/m/y H:i:s", strtotime($row['log_ping_date'])) : "";  ?></td>
+                                        if ($row['log_ping_date_down'] != "")
+                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>                                                           
+                                    <td><?php echo $row['log_ping_date_down'] != "" ? date("d/m/y H:i:s", strtotime($row['log_ping_date_down'])) : "";  ?></td>
+                                    <td align="center"><img src="<?php
+                                        if ($row['log_ping_date_up'] != "")
+                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                                           
+                                    <td><?php echo $row['log_ping_date_up'] != "" ? date("d/m/y H:i:s", strtotime($row['log_ping_date_up'])) : "";  ?></td>
                                 </tr>                                                                                   
                          </table> 
                     </td>
                     <td align="left"><?php echo "<b>Floor:</b> " . $row['location_floor'] . ' <b>Rack:</b> ' . $row['location_rack'] . ' <br/><b>Room:</b> ' . $row['location_room'] . ' <b>Building:</b> ' . $row['location_building']; ?></td>            
                 </tr>        
-            <?php endif; ?>
-        
+            <?php endif; ?>        
     <?php endforeach; ?>
 </table>
 

@@ -38,7 +38,7 @@ function walk($host, $community) {
 //        }
 //        print_r($result);
 connectDB();
-$result = mysql_query(" SELECT id, ip_address,snmp_comm_str FROM mon_devices where monitor_yn = 'Y' ");
+$result = mysql_query(" SELECT id, ip_address,snmp_comm_str FROM mon_devices where bandwidth_yn = 'Y' ");
 $sql_insert_begin = "INSERT INTO mon_log_check_bandwidth (device_id, interface_name, bandwidth_in, bandwidth_out) VALUES ( ";
 $sql_insert_end = " ) ";
 //

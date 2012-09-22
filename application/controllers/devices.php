@@ -3,6 +3,9 @@
 class Devices extends CI_Controller {   
     
     public function index() {
+        if(!$this->session->userdata('logged_in')) {
+            redirect('welcome');
+        }
         $this->load->model('device_model');
         $this->load->library("pagination");
         

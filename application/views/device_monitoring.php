@@ -31,11 +31,11 @@
                                 <tr>
                                     <td align="center"><img src="<?php
                                         if ($row['log_ping_date_down'] != "")
-                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>                                                           
+                                            echo base_url() . "images/red.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>                                                           
                                     <td><?php echo $row['log_ping_date_down'] != "" ? date("d/m/y H:i:s", strtotime($row['log_ping_date_down'])) : "";  ?></td>
                                     <td align="center"><img src="<?php
                                         if ($row['log_ping_date_up'] != "")
-                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                                           
+                                            echo base_url() . "images/green.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>                                                           
                                     <td><?php echo $row['log_ping_date_up'] != "" ? date("d/m/y H:i:s", strtotime($row['log_ping_date_up'])) : "";  ?></td>
                                 </tr>                                                                                   
                          </table> 

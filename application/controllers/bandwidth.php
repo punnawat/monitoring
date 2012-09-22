@@ -3,6 +3,9 @@
 class Bandwidth extends CI_Controller {   
     
     public function index() {
+        if(!$this->session->userdata('logged_in')) {
+            redirect('welcome');
+        }
         $header['title'] = 'Bandwidth Monitoring';
         $header['current_page_item'] = 'bandwidth';
         
@@ -43,13 +46,16 @@ class Bandwidth extends CI_Controller {
         $header['current_page_item'] = 'bandwidth';
 
         $this->load->model('device_model');     
-        $device_id = $this->uri->segment(3);
-        $log_id = $this->uri->segment(4);
+        $device_id = $this->input->post('txtDeviceID');
+        $log_id = $this->input->post('txtLogID');
+        //$startDate = $this->input->post('txtStartDate');
+        //$endDate = $this->input->post('txtEndDate');
+        
         $data['device'] = $this->device_model->getById($device_id);
         $data['log'] = $this->device_model->getInterfaces($device_id);
         
         $interface = $this->device_model->getInterfaceByLogID($log_id);
-        $data['interface_bw'] = $this->device_model->getInterfaceBW($interface['interface_name']);
+        $data['interface_bw'] = $this->device_model->getInterfaceBW($device_id,$interface['interface_name']);
         $data['interface_name'] = $interface['interface_name'];
         $this->load->view('layout_header', $header);
         $this->load->view('bandwidth_detail', $data);

@@ -24,9 +24,10 @@
       <li <?php echo $current_page_item == 'servers' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('servers');?>" style="font-weight: bold">Server Devices</a></li>
       <li <?php echo $current_page_item == 'realtime' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('real_time');?>" style="font-weight: bold">Real Time</a></li>
       <li <?php echo $current_page_item == 'bandwidth' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('bandwidth');?>" style="font-weight: bold">Bandwidth</a></li>
-      <li <?php echo $current_page_item == 'availability' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('availability');?>" style="font-weight: bold">Availability</a></li>
-<!--      <li <?php echo $current_page_item == 'settings' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('settings');?>" style="font-weight: bold">Settings</a></li> -->
-      <li <?php echo $current_page_item == 'contactus' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('contactus');?>" style="font-weight: bold">Contact US</a></li>
+      <li <?php echo $current_page_item == 'savailability' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('server_availability');?>" style="font-weight: bold">Server Availability</a></li>
+      <li <?php echo $current_page_item == 'navailability' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('network_availability');?>" style="font-weight: bold">Network Availability</a></li>
+<!--      <li <?php echo $current_page_item == 'settings' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('settings');?>" style="font-weight: bold">Settings</a></li> 
+      <li <?php echo $current_page_item == 'contactus' ?  ' class="current_page_item" ' : ''; ?> ><a href="<?php echo site_url('contactus');?>" style="font-weight: bold">Contact US</a></li> -->
     </ul>    
   </div>
   </div>

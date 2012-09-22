@@ -27,6 +27,17 @@ class Server_model extends CI_Model {
         return $data;
     }
 
+   
+    
+    function search() {
+        if ($this->input->post('txtKeyword') != null) {
+            $this->db->like('server_name', $this->input->post('txtKeyword'));
+            $this->db->or_like('ip_address', $this->input->post('txtKeyword'));
+            return $this->db->get_where('servers', array('monitor_yn' => 'Y'));
+        }
+        return $this->getAllAval(999, 0);
+    }
+    
     function getById($id) {
         $query = $this->db->get_where('servers', array('id' => $id));
         return $query->row_array();
@@ -187,8 +198,46 @@ class Server_model extends CI_Model {
         return $query = $this->db->get('servers', $limit, $start);
     }
 
-    public function countAll() {
+    function countAll() {
         return $this->db->count_all("servers");
+    }
+    
+    function getAllAval($limit, $start) {
+        $this->db->limit($limit, $start);
+        $criteria = array('monitor_yn' => 'Y');
+        return $this->db->get_where('servers', $criteria);
+    }
+
+    function countAllAval() {
+        $this->db->where('monitor_yn', 'Y');
+        $this->db->from('servers');        
+        return $this->db->count_all_results();
+    }
+
+    function getAval($id, $service) {
+        $this->db->where('server_id', $id);
+        $this->db->where('status', 'UP');
+        $this->db->where('service', $service);
+        $this->db->from('log_check_services');        
+        $up = $this->db->count_all_results();
+        
+        $this->db->where('server_id', $id);
+        $this->db->where('status', 'DOWN');
+        $this->db->where('service', $service);
+        $this->db->from('log_check_services');        
+        $down = $this->db->count_all_results();
+        if($up + $down == 0)
+            return 0;
+        return $up * 100.0 / ($up + $down);
+    }
+    
+    function getNotAval($id) {
+        $this->db->where('server_id', $id);        
+        $this->db->where('status', 'DOWN');
+        $this->db->order_by("updated_date", "desc");
+        $this->db->from('log_check_services');        
+        
+        return $this->db->get();
     }
 
     function insert() {

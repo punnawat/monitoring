@@ -3,6 +3,9 @@
 class Real_time extends CI_Controller {
 
     public function index() {
+        if(!$this->session->userdata('logged_in')) {
+            redirect('welcome');
+        }
         $header['title'] = 'Real Time Monitoring';
         $header['current_page_item'] = 'realtime';
         
@@ -39,7 +42,7 @@ class Real_time extends CI_Controller {
         $data['log'] = $this->device_model->getInterfaces($device_id);
         
         $interface = $this->device_model->getInterfaceByLogID($log_id);
-        $data['interface_bw'] = $this->device_model->getInterfaceRtBw($interface['interface_name']);
+        $data['interface_bw'] = $this->device_model->getInterfaceRtBw($device_id, $interface['interface_name']);
         $data['interface_name'] = $interface['interface_name'];
         $this->load->view('layout_header', $header);
         $this->load->view('real_time_detail', $data);

@@ -101,7 +101,7 @@ img.right {
 
 #menu-bg {
     background: #734201;
-    height: 45px;
+    height: 40px;
 }
 
 #menu {
@@ -123,7 +123,7 @@ img.right {
     display: block;
     float: left;
     margin: 0 3px 0 0;
-    padding: 12px 10px 10px 10px;
+    padding: 10px 5px 8px 5px;
     border: none;
     text-decoration: none;
     text-transform: uppercase;
@@ -141,7 +141,7 @@ img.right {
 
 #menu .current_page_item a {
     background: none;
-    margin: 0 3px 0 0;
+    margin: 0 0 0 0;
     background: #311c00;
     border-bottom: 2px solid #fff;
     color: #FFFFFF;

@@ -33,12 +33,12 @@
                                 <tr>
                                     <td align="center"><img src="<?php
                                         if ($row['status_http_down'] != "")                                            
-                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
+                                            echo base_url() . "images/red.png"; else echo base_url() . "images/space.png"; ?>" width="15" /></td>
                                     <td>HTTP</td>                        
                                     <td><?php echo $row['status_http_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_http_down'])) : "";  ?></td>
                                     <td align="center"><img src="<?php
                                         if ($row['status_http_up'] != "")                                            
-                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                            echo base_url() . "images/green.png"; else echo base_url() . "images/space.png"; ?>" width="15" /></td>                                    
                                     <td><?php echo $row['status_http_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_http_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?>
@@ -47,12 +47,12 @@
                                 <tr>
                                     <td align="center"><img src="<?php
                                         if ($row['status_https_down'] != "")                                            
-                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
+                                            echo base_url() . "images/red.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>
                                     <td>HTTPS</td>                        
                                     <td><?php echo $row['status_https_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_https_down'])) : ""; ?></td>
                                     <td align="center"><img src="<?php
                                         if ($row['status_https_up'] != "")                                            
-                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                            echo base_url() . "images/green.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>                                    
                                     <td><?php echo $row['status_https_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_https_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?>
@@ -61,12 +61,12 @@
                                 <tr>
                                     <td align="center"><img src="<?php
                                         if ($row['status_ftp20_down'] != "")                                            
-                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
+                                            echo base_url() . "images/red.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>
                                     <td>FTP(20)</td>                        
                                     <td><?php echo $row['status_ftp20_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_ftp20_down'])) : ""; ?></td>
                                     <td align="center"><img src="<?php
                                         if ($row['status_ftp20_up'] != "")                                            
-                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                            echo base_url() . "images/green.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>                                    
                                     <td><?php echo $row['status_ftp20_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_ftp20_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?> 
@@ -74,12 +74,12 @@
                                 <tr>
                                     <td align="center"><img src="<?php
                                         if ($row['status_ftp21_down'] != "")                                            
-                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
+                                            echo base_url() . "images/red.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>
                                     <td>FTP(21)</td>                        
                                     <td><?php echo $row['status_ftp21_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_ftp21_down'])) : ""; ?></td>
                                     <td align="center"><img src="<?php
                                         if ($row['status_ftp21_up'] != "")                                            
-                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                            echo base_url() . "images/green.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>                                    
                                     <td><?php echo $row['status_ftp21_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_ftp21_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?>
@@ -87,12 +87,12 @@
                                 <tr>
                                     <td align="center"><img src="<?php
                                         if ($row['status_smtp_down'] != "")                                            
-                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
+                                            echo base_url() . "images/red.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>
                                     <td>SMTP</td>                        
                                     <td><?php echo $row['status_smtp_down'] != "" ? date("d/m/y H:i:s", strtotime($row['status_smtp_down'])) : "";?></td>
                                     <td align="center"><img src="<?php
                                         if ($row['status_smtp_up'] != "")                                            
-                                            echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                            echo base_url() . "images/green.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>                                    
                                     <td><?php echo $row['status_smtp_up'] != "" ? date("d/m/y H:i:s", strtotime($row['status_smtp_up'])) : "";  ?></td>
                                 </tr>                                             
                             <?php endif; ?> 
@@ -105,12 +105,12 @@
                                         <tr>
                                             <td align="center"><img src="<?php
                                                 if ($row['status_tcp_down'. trim($d)] != "")                                            
-                                            echo base_url() . "images/red.png"; ?>" width="15" /></td>
+                                            echo base_url() . "images/red.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>
                                             <td>TCP(<?php echo trim($d);?>)</td>                        
                                             <td><?php echo $row['status_tcp_down'. trim($d)] != "" ? date("d/m/y H:i:s", strtotime($row['status_tcp_down'. trim($d)])) : "";?></td>
                                             <td align="center"><img src="<?php
                                                 if ($row['status_tcp_up'. trim($d)] != "")                                            
-                                                    echo base_url() . "images/green.png"; ?>" width="15" /></td>                                    
+                                                    echo base_url() . "images/green.png"; else echo base_url() . "images/space.png";?>" width="15" /></td>                                    
                                             <td><?php echo $row['status_tcp_up'. trim($d)] != "" ? date("d/m/y H:i:s", strtotime($row['status_tcp_up'. trim($d)])) : "";  ?></td>
                                         </tr>
                                         <?php endforeach;

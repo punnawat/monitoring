@@ -3,6 +3,9 @@
 class Network_monitoring extends CI_Controller {   
     
     public function index() {
+        if(!$this->session->userdata('logged_in')) {
+            redirect('welcome');
+        }
         $header['title'] = 'Network Monitoring';
         $header['current_page_item'] = 'dmonitor';
         $this->load->model('device_model');          

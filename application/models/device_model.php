@@ -127,10 +127,11 @@ class Device_model extends CI_Model {
         return $query->row_array();
     }
 
-    function getInterfaceRtBw($interfaceName) {
+    function getInterfaceRtBw($device_id, $interfaceName) {
         $sql = " (SELECT id,device_id,interface_name,bandwidth_in,bandwidth_out,updated_date ";
         $sql .= " FROM mon_log_check_bandwidth ";
         $sql .= " WHERE interface_name = '" . $interfaceName . "' ";
+        $sql .= " and device_id	 = " . $device_id . " ";
         $sql .= " and updated_date < '" . $this->session->userdata('rt_start_time') . "'";
         $sql .= " order by updated_date desc limit 2) ";
         $sql .= " UNION ";
@@ -142,11 +143,17 @@ class Device_model extends CI_Model {
         ;
     }
 
-    function getInterfaceBW($interfaceName) {
+    function getInterfaceBW($device_id, $interfaceName) {
         $this->db->order_by("updated_date", "asc");
 
-        $criteria = array('interface_name' => $interfaceName);
+        $criteria = array('interface_name' => $interfaceName, 'device_id' => $device_id);
+        if($this->input->post('txtStartDate') != null)
+            $criteria['updated_date >= '] = $this->input->post('txtStartDate'). ' 00:00:00';
+        if($this->input->post('txtEndDate') != null)
+            $criteria['updated_date <= '] = $this->input->post('txtEndDate'). ' 23:59:59';
+            
         $query = $this->db->get_where('log_check_bandwidth', $criteria);
+        //print_r($this->db->last_query());
         return $query;
     }
 
@@ -154,10 +161,46 @@ class Device_model extends CI_Model {
         return $query = $this->db->get('devices', $limit, $start);
     }
 
-    public function countAll() {
-        return $this->db->count_all("devices");
+    function countAll() {
+         return $this->db->count_all("devices");
+    }
+    
+    function getAllAval($limit, $start) {
+        $this->db->limit($limit, $start);
+        $criteria = array('monitor_yn' => 'Y');
+        return $this->db->get_where('devices', $criteria);
     }
 
+    function countAllAval() {
+        $this->db->where('monitor_yn', 'Y');
+        $this->db->from('devices');        
+        return $this->db->count_all_results();
+    }
+
+    function getAval($id) {
+        $this->db->where('device_id', $id);
+        $this->db->where('status', 'UP');
+        $this->db->from('log_check_devices');        
+        $up = $this->db->count_all_results();
+        
+        $this->db->where('device_id', $id);
+        $this->db->where('status', 'DOWN');
+        $this->db->from('log_check_devices');        
+        $down = $this->db->count_all_results();
+        if($up + $down == 0)
+            return 0;
+        return $up * 100.0 / ($up + $down);
+    }
+    
+    function getNotAval($id) {
+        $this->db->where('device_id', $id);
+        $this->db->where('status', 'DOWN');
+        $this->db->order_by("updated_date", "desc");
+        $this->db->from('log_check_devices');        
+        
+        return $this->db->get();
+    }
+    
     function insert() {
         $this->db->insert('devices', $this->mapData());
         return $this->db->insert_id();
